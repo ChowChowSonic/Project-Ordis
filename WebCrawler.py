@@ -1,9 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-import DefaultVoiceSynthesizer as synth
+import lxml.html
+#import DefaultVoiceSynthesizer as synth
 from googlesearch import search
 
-def googlesearch(query, wordtags):
+def googlesearch(query, wordtags="", searches=5):
     querytostring = ""
     try:
         for i in query:
@@ -15,7 +16,7 @@ def googlesearch(query, wordtags):
         querytostring = query
     query = querytostring
 
-    results = search(query, tld='com', lang='en', num=5, start=0, stop=5, pause=2.0)
+    results = search(query, tld='com', lang='en', num=searches, start=0, stop=searches, pause=2.0)
     filteredresults = []
     simpleresults = []
     synth.say("Here are the top five google results for " + query +

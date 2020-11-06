@@ -22,7 +22,7 @@ CHANNELS = 1 # Mono vs sterio im guessing?
 RATE = 44100 # the bitrate of the audio...?
 CHUNK = 1024 # dont know dont care dont mess.
 RECORDING = False
-WAVE_OUTPUT_FILENAME = "../Assets/file.wav"
+WAVE_OUTPUT_FILENAME = "../file.wav"
 recorder = sr.Recognizer()
 
 stream = "" # the input stream
@@ -69,7 +69,7 @@ def record():
 def recordandrecognise():
     try:
         defaultopenthread.run()
-        file = sr.AudioFile('../Assets/file.wav')
+        file = sr.AudioFile('../file.wav')
         with file as source:
             audio = recorder.record(source)
         try:

@@ -58,7 +58,7 @@ def findAudio(filename):
     supportedfiletypes = [".mp3", ".wav"]
     possiblefiles = []
     shortnames = []
-    for root, dirs, file in os.walk("C:\\", topdown=True):
+    for root, dirs, file in os.walk("C:", topdown=True):
         for name in file:
             for filetype in supportedfiletypes:
                 if name.lower() == filename.lower()+filetype:
@@ -70,7 +70,7 @@ def findVideo(filename):
     supportedfiletypes = [".avi"]
     possiblefiles = []
     shortnames = []
-    for root, dirs, file in os.walk("C:\\", topdown=True):
+    for root, dirs, file in os.walk("C:", topdown=True):
         for name in file:
             for filetype in supportedfiletypes:
                 if name.lower() == filename.lower() + filetype:
@@ -182,6 +182,9 @@ def what(words, taggedwords):
     if words[1] == "is":
         request = words[2:]
         tagrequest = taggedwords[2:]
+    elif words[0] == "what's":
+        request = words[1:]
+        tagrequest = taggedwords[1:]
     else:
         request = words
         tagrequest = taggedwords
@@ -196,6 +199,12 @@ def what(words, taggedwords):
         return getresults(words, taggedwords)
 
 def where(words, taggedwords):
+    if words[0] == "where's":
+        locationname = words[1:]
+    elif words[1] == "is":
+        locationname = words[2:]
+
+    words.append("location")
     return getresults(words, taggedwords)
 
 def why(words, taggedwords):
@@ -308,6 +317,7 @@ def comprehendspeech(words):
         firstwords = {
             "who": findperson,
             "what": what,
+            "what's": what,
             "when": when,
             "where": where,
             "why": why,
@@ -318,7 +328,10 @@ def comprehendspeech(words):
         }
         if len(words) > 0:
             results = firstwords.get(words[0], getresults)(words, word_tags)
-            usefulresults = WebCrawler.getusefulinfo(results, words)
+            if isinstance(results, type("string")):
+                usefulresults = WebCrawler.getusefulinfo(results, words)
+            else:
+                usefulresults = results
             if not usefulresults == "":
                 synth.say(usefulresults)
             else:

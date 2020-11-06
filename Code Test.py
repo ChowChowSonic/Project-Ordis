@@ -1,53 +1,25 @@
 import requests
 from bs4 import BeautifulSoup
-def findinfo(url):
-    html = requests.get(url).text
-    soup = BeautifulSoup(html, 'lxml')
-    paragraphs = str(soup.findAll("p"))
-    text = ""
-    isinbracket = False
-    for paragraph in range(len(paragraphs)):
-        for i in range(len(paragraphs[paragraph])):
-            if paragraphs[paragraph][i] == "<" or paragraphs[paragraph][i] == "[":
-                isinbracket = True
-            if not isinbracket:
-                text += paragraphs[paragraph][i]
-            if paragraphs[paragraph][i] == ">" or paragraphs[paragraph][i] == "]":
-                isinbracket = False
-    return text
+import re
+import lxml.html
+#import DefaultVoiceSynthesizer as synth
+from googlesearch import search
 
-def getusefulinfo(content, question, taggedwords=""):
-    question = question.lower().split(" ")[2:]
-    contentlist = content.lower().split(".")
-    rnge = [0,0]
-    foundword = False
-    #Set the initial position
-    for sentencepos in range(len(contentlist)):
-        for word in question:
-            if word in contentlist[sentencepos]:
-                rnge[0] = sentencepos
-                foundword = True
-                break
-        if foundword:
-            break
+def findaddress(location):
+    '''<div jstcache="811"
+    class="ugiz4pqJLAG__primary-text gm2-body-2"
+    jsan="7.ugiz4pqJLAG__primary-text,7.gm2-body-2">
+    Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France
+    </div>'''
+    html = requests.get("http://www.google.com/maps/place/"+location).content
+    tree = BeautifulSoup(html, "lxml")
+    attribs = {
+    "jstcache":"811",
+    "class":"ugiz4pqJLAG__primary-text gm2-body-2",
+    "jsan":"7.ugiz4pqJLAG__primary-text,7.gm2-body-2"
+               }
+    for node in tree:
+        print(node)
+        print()
 
-    #set the final position
-    for sentencepos in range(len(contentlist)):
-        for word in question:
-            if word in contentlist[sentencepos]:
-                rnge[1] = sentencepos
-                question.remove(word)
-                break
-    if rnge[1] > 10:
-        rnge[1] = 10
-    print(rnge)
-    smartcontent = ""
-    #Change everything back to a string from a list[string]
-    for i in range(rnge[0], rnge[1]+1):
-        smartcontent += contentlist[i]
-        print(contentlist[i])
-    return smartcontent
-
-
-content = findinfo("https://en.wikipedia.org/wiki/Terry_Crews")
-print(getusefulinfo(content, "who is terry crews"))
+print(findaddress("eiffel+tower"))
