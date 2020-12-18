@@ -92,10 +92,7 @@ def getresults(words, taggedwords):
 def parsenumber(numbers):
     try:
         if type(numbers) == type("string"):
-            result = int(numbers)
-        elif type(numbers) == type(["list"]) and len(numbers) == 1:
-            result = int(numbers[0])
-        return result
+            numbers = numbers.split()
     except:
         result = 1
     for i in range(0,len(numbers)):

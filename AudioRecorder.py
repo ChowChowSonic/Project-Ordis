@@ -5,7 +5,7 @@ import threading
 import audioop
 import math
 
-#I was hoping to keep OOP logic out of my Python but Screw Keeping Things Consistent™ AM I RIGHT
+#I was hoping to keep OOP logic out of my Python but Screw Keeping Things Consistent™ AM I RIGHT?!?!
 class audioRecorder(threading.Thread):
     def __init__(self, ThreadID, name, counter):
         threading.Thread.__init__(self)
